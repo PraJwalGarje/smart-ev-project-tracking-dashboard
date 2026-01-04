@@ -103,13 +103,16 @@ Navigation and feature access are dynamically controlled using role-based route 
    git clone https://github.com/your-username/smart-ev-project-tracking-dashboard.git
    
 2. Navigate into the project directory:
-cd smart-ev-project-tracking-dashboard
+   ```bash
+   cd smart-ev-project-tracking-dashboard
 
 3. Install dependencies:
-npm install
+   ```bash
+   npm install
 
-4. Start the Parallel API + Vite development server
-npm run dev:all
+4. Start the Parallel API + Vite development server:
+   ```bash
+   npm run dev:all
 
 ### Key Features of the Updated README:
 - **Headings and Subheadings**: Properly categorized sections for better readability.
