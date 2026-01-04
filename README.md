@@ -114,10 +114,5 @@ Navigation and feature access are dynamically controlled using role-based route 
    ```bash
    npm run dev:all
 
-### Key Features of the Updated README:
-- **Headings and Subheadings**: Properly categorized sections for better readability.
-- **Tables**: Used a table for user roles to make it clearer.
-- **Code blocks**: Used for installation commands and to highlight important steps.
-  
 
 
