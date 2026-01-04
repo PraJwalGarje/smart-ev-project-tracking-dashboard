@@ -1,36 +1,36 @@
 # Smart EV Project Collaboration & Tracking Dashboard
 
 ## Overview
-The **Smart EV Project Collaboration and Tracking Dashboard** is a modern, web-based application designed to streamline project management, analytics, and cross-team collaboration within the Smart Electric Vehicle (EV) development lifecycle.
+The **Smart EV Project Collaboration and Tracking Dashboard** is a modern, web based application designed to streamline project management, analytics, and cross-team collaboration within the Smart Electric Vehicle (EV) development lifecycle.
 
-This project addresses a common challenge in EV product development environments where multiple technical and managerial teams operate in silos. The dashboard provides a centralized platform for monitoring project health, tracking milestones, visualizing risks, and enabling data-driven decision making through intuitive analytics.
+This project addresses a common challenge in EV product development environments where multiple technical and managerial teams operate in silos. The dashboard provides a centralized platform for monitoring project health, tracking milestones, visualizing risks, and enabling data driven decision making through intuitive analytics.
 
 The system is built using **React.js**, styled with **Tailwind CSS**, and integrates interactive charts to represent project health, charging activity, and maintenance risk. It supports role-based access, dark mode, and responsive design, making it suitable for both technical users and executive stakeholders.
 
 ## Project Objectives
 - Design a centralized dashboard for Smart EV project tracking
 - Enable project managers to monitor milestones and timelines
-- Provide executives with high-level analytical insights
+- Provide executives with high level analytical insights
 - Allow engineers and team leads to update project progress
-- Implement role-based access control for clarity and security
+- Implement role based access control for clarity and security
 - Ensure full dark mode compatibility across all visual components
 
 ## System Architecture (High Level)
-The application follows a modular, component-driven architecture:
+The application follows a modular, component driven architecture:
 
 ### Frontend (React.js)
-- Component-based UI structure
+- Component based UI structure
 - Context API for authentication and global state
-- React Router for role-protected navigation
+- React Router for role protected navigation
 
 ### Backend Simulation
 - JSON Server / mock API endpoints
 - Simulated project, milestone, and team datasets
 
 ### Analytics Layer
-- Recharts-based data visualization
+- Recharts based data visualization
 - Dynamic chart rendering driven by backend data
-- Explicit theme-safe styling for dark and light modes
+- Explicit theme safe styling for dark and light modes
 
 ## Tech Stack
 ### Frontend
@@ -79,16 +79,16 @@ Navigation and feature access are dynamically controlled using role-based route 
 - Team and milestone assignment
 
 ### Reports
-- Gantt-style timeline view
+- Gantt style timeline view
 - Milestone tracking and progress overview
 
 ### Teams
 - Team overview and member counts
-- Unified modal-based CRUD operations
+- Unified modal based CRUD operations
 
 ### UI Enhancements
 - Dark mode toggle
-- Page and card-level animations
+- Page and card level animations
 - Responsive layout across devices
 
 ## Getting Started
@@ -113,6 +113,3 @@ Navigation and feature access are dynamically controlled using role-based route 
 4. Start the Parallel API + Vite development server:
    ```bash
    npm run dev:all
-
-
-
