@@ -1,0 +1,34 @@
+{
+  "name": "smart-ev-dashboard",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "api": "json-server --watch db.json --port 4000 --delay 400",
+    "dev:all": "npm-run-all --parallel api dev"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.19",
+    "gantt-task-react": "^0.3.9",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-hot-toast": "^2.6.0",
+    "react-router-dom": "6.26.2",
+    "recharts": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.4",
+    "autoprefixer": "^10.4.20",
+    "json-server": "^0.17.4",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.47",
+    "tailwindcss": "3.4.14",
+    "vite": "^7.1.7"
+  }
+}

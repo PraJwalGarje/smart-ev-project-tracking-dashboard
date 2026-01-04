@@ -1,0 +1,749 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Global layout stability ---------- */
+html, body, #root { height: 100%; }
+body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollbar appears */
+
+/* Optional: smooth anchor scrolling (uncomment if you want it) */
+/* html { scroll-behavior: smooth; } */
+
+/* Hide scrollbar helper (use with care) */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+
+/* ========= Tailwind v3-safe custom components ========= */
+@layer components {
+  /* Cards / stats */
+  .card {
+    @apply bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow
+           ring-1 ring-gray-100;
+  }
+
+  .stat-grid   { @apply grid grid-cols-1 md:grid-cols-3 gap-6; }
+  .stat-label  { @apply text-sm text-gray-500; }
+  .stat-value  { @apply text-3xl font-bold mt-2 tracking-tight; }
+  .stat-primary { @apply text-blue-600; }
+  .stat-success { @apply text-green-600; }
+  .stat-warning { @apply text-yellow-600; }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-lg px-4 py-2
+           font-medium text-white bg-blue-600 hover:bg-blue-700
+           transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 rounded-lg px-4 py-2
+           font-medium text-gray-800 bg-white border border-gray-300
+           hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-blue-200;
+  }
+
+  /* Header */
+  .header {
+    @apply sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-gray-100
+           px-6 py-3 flex items-center justify-between;
+  }
+  .header-title   { @apply text-xl font-semibold text-gray-800 tracking-tight; }
+  .header-actions { @apply flex items-center gap-3; }
+
+  /* Sidebar (static desktop styles only; mobile drawer uses inline Tailwind in JSX) */
+  .sidebar-title { @apply text-lg font-semibold mb-4; }
+  .nav           { @apply flex flex-col gap-1.5; }
+  .nav-link {
+    @apply block rounded-md px-3 py-2 text-gray-700
+           hover:bg-blue-50 hover:text-blue-700 transition-colors;
+  }
+  .nav-link.is-active { @apply bg-blue-50 text-blue-700 font-medium; }
+
+  /* Page headings */
+  .page-title    { @apply text-3xl font-bold text-blue-600 mb-2 tracking-tight; }
+  .page-subtitle { @apply text-gray-700 mb-8; }
+
+  /* Layout container */
+  .container-main { @apply max-w-7xl mx-auto px-4 sm:px-6 md:px-8; }
+
+  /* Helpers */
+  .section-divider { @apply mt-8 mb-6 h-px bg-gray-100; }
+
+  /* ===================== DARK MODE TWEAKS ===================== */
+
+  /* App shell + cards */
+  .dark .card {
+    @apply bg-slate-900/80 hover:bg-slate-900 hover:shadow-md
+           ring-1 ring-slate-700 text-slate-100;
+  }
+
+  /* Make all the usual gray text utilities lighter in dark mode */
+  .dark .text-gray-500,
+  .dark .text-gray-600,
+  .dark .text-gray-700,
+  .dark .text-gray-800 {
+    @apply text-gray-200;
+  }
+
+  /* Page title / subtitle in dark mode */
+  .dark .page-title {
+    @apply text-blue-400;
+  }
+  .dark .page-subtitle {
+    @apply text-gray-300;
+  }
+
+  /* Header text + buttons */
+  .dark .header {
+    @apply bg-slate-900/80 border-slate-800;
+  }
+  .dark .header-title {
+    @apply text-slate-100;
+  }
+  .dark .btn-secondary {
+    @apply bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700;
+  }
+
+  /* Table header row */
+  .dark table thead tr {
+    @apply bg-slate-900/80;
+  }
+  .dark table thead th {
+    @apply text-gray-200;
+  }
+
+  /* Sidebar */
+  .dark .nav-link {
+    @apply text-gray-200 hover:bg-slate-800 hover:text-blue-300;
+  }
+  .dark .nav-link.is-active {
+    @apply bg-slate-800 text-blue-300;
+  }
+
+  /* ========= GLOBAL SELECT STYLING (ALWAYS READABLE) ========= */
+
+  /* All dropdowns: white background + black text in both themes */
+  select {
+    @apply bg-white text-black;
+  }
+
+  select:focus {
+    @apply ring-2 ring-blue-300 outline-none;
+  }
+}
+
+/* Base dark body background + text */
+.dark body {
+  @apply bg-slate-950 text-slate-100;
+}
+
+@layer components {
+  /* Dashboard layout helpers */
+  .dashboard-stat-grid {
+    @apply stat-grid;
+  }
+
+  .dashboard-loading-message {
+    @apply mt-6 text-sm text-gray-500 dark:text-gray-300;
+  }
+
+  .dashboard-error-message {
+    @apply mt-3 text-sm text-red-600;
+  }
+
+  .dashboard-secondary-grid {
+    @apply mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6;
+  }
+
+  .dashboard-section-header {
+    @apply mb-4;
+  }
+
+  .dashboard-section-title {
+    @apply text-lg font-semibold text-gray-800 dark:text-gray-100;
+  }
+
+  .dashboard-section-subtitle {
+    @apply text-xs text-gray-500 dark:text-gray-300;
+  }
+
+  .dashboard-timeline-card {
+    /* card look is provided by .card in JSX */
+  }
+
+  .dashboard-timeline-wrapper {
+    @apply w-full overflow-x-auto;
+  }
+
+  .dashboard-empty-message {
+    @apply text-sm text-gray-500 dark:text-gray-300;
+  }
+
+  .dashboard-maintenance-card {
+    /* card already applied in JSX */
+  }
+
+  .dashboard-maintenance-layout {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6 items-center;
+  }
+
+  .dashboard-maintenance-chart {
+    @apply h-64 w-full max-w-xs mx-auto;
+  }
+
+  .dashboard-maintenance-legend {
+    @apply space-y-3 text-sm;
+  }
+
+  .dashboard-maintenance-legend-title {
+    @apply text-xs font-semibold text-gray-500 dark:text-gray-300
+           uppercase tracking-wide;
+  }
+
+  .dashboard-maintenance-legend-row {
+    @apply flex items-center justify-between rounded-lg border border-gray-100
+           px-3 py-2;
+  }
+
+  .dashboard-maintenance-legend-label {
+    @apply flex items-center gap-2;
+  }
+
+  .dashboard-maintenance-legend-dot {
+    @apply inline-block h-2 w-2 rounded-full;
+  }
+
+  .dashboard-maintenance-legend-name {
+    @apply text-gray-700 dark:text-gray-100;
+  }
+
+  .dashboard-maintenance-legend-meta {
+    @apply text-xs text-gray-500 dark:text-gray-300;
+  }
+
+  /* ========= Modal styles ========= */
+  .modal-backdrop {
+    @apply fixed inset-0 z-40 bg-black/30;
+  }
+
+  .modal-outer-container {
+    @apply fixed inset-0 z-50 flex items-center justify-center p-4;
+  }
+
+  .modal-card {
+    @apply w-full max-w-lg;
+  }
+
+  .modal-header {
+    @apply flex items-center justify-between mb-4;
+  }
+
+  .modal-title {
+    @apply text-lg font-semibold;
+  }
+
+  .modal-close-button {
+    @apply text-gray-500 hover:text-gray-700;
+  }
+
+  .modal-body {
+    @apply space-y-4;
+  }
+
+  .modal-footer {
+    @apply mt-6 flex justify-end gap-3;
+  }
+
+  /* ========= Projects page layout ========= */
+  .projects-page-header {
+    @apply mb-6;
+  }
+
+  .projects-controls-row {
+    @apply mt-2 flex flex-col sm:flex-row sm:items-center gap-3;
+  }
+
+  .projects-filters-row {
+    @apply flex flex-col sm:flex-row sm:items-center gap-3 flex-1;
+  }
+
+  .projects-filter-control {
+    @apply flex items-center gap-2;
+  }
+
+  .projects-filter-label {
+    @apply text-sm text-gray-600;
+  }
+
+  .projects-filter-select {
+    @apply rounded-md border border-gray-300 px-3 py-2 text-sm
+           focus:outline-none focus:ring-2 focus:ring-blue-300
+           bg-white text-slate-900;
+  }
+
+  .projects-actions-row {
+    @apply flex items-center gap-3;
+  }
+
+  .projects-table-card {
+    /* card base already applied by .card in JSX */
+  }
+
+  .projects-table-wrapper {
+    @apply overflow-x-auto;
+  }
+
+  .projects-table {
+    @apply min-w-full text-sm;
+  }
+
+  .projects-table-header-row {
+    @apply text-left text-gray-600;
+  }
+
+  .projects-table-header-cell {
+    @apply py-3 px-3;
+  }
+
+  .projects-table-actions-column {
+    @apply w-40;
+  }
+
+  .projects-table-row {
+    @apply border-t border-gray-100;
+  }
+
+  .projects-table-cell {
+    @apply py-3 px-3;
+  }
+
+  .projects-actions-inline {
+    @apply flex gap-2;
+  }
+
+  .projects-empty-state-cell {
+    @apply py-6 px-3 text-gray-500;
+  }
+
+  .projects-loading-message {
+    @apply mt-4 text-sm text-gray-500 dark:text-gray-300;
+  }
+
+  .projects-error-message {
+    @apply mt-2 text-sm text-red-600;
+  }
+
+  .projects-status-badge {
+    @apply px-2 py-1 rounded text-xs font-medium;
+  }
+
+  /* ========= Projects modal form ========= */
+  .projects-modal-form {
+    @apply space-y-4;
+  }
+
+  .projects-modal-field {
+    @apply flex flex-col;
+  }
+
+  .projects-modal-label {
+    @apply block text-sm text-gray-700 mb-1;
+  }
+
+  .projects-modal-input {
+    @apply w-full rounded-md border border-gray-300 px-3 py-2
+           focus:outline-none focus:ring-2 focus:ring-blue-300
+           bg-white text-slate-900;
+  }
+
+  /* ========= Reports page layout ========= */
+  .reports-page-header {
+    @apply mb-6;
+  }
+
+  .reports-toolbar {
+    @apply mb-4 flex items-center gap-3;
+  }
+
+  .reports-status-grid {
+    @apply mb-6;
+  }
+
+  /* Gantt card */
+  .reports-gantt-card {
+    @apply mb-3;
+  }
+
+  .reports-gantt-header {
+    @apply flex items-center justify-between mb-4;
+  }
+
+  .reports-gantt-title {
+    @apply text-lg font-semibold text-gray-800 dark:text-gray-100;
+  }
+
+  .reports-gantt-view {
+    @apply flex items-center gap-2;
+  }
+
+  .reports-gantt-view-label {
+    @apply text-sm text-gray-600 dark:text-gray-200;
+  }
+
+  .reports-gantt-view-select {
+    @apply rounded-md border border-gray-300 px-3 py-2 text-sm
+           focus:outline-none focus:ring-2 focus:ring-blue-300
+           bg-white text-slate-900;
+  }
+
+  .reports-gantt-timeline-wrapper {
+    @apply w-full overflow-x-auto;
+  }
+
+  .reports-gantt-empty-message {
+    @apply text-sm text-gray-500 dark:text-gray-300;
+  }
+
+  /* Milestones card + table */
+  .reports-milestones-card {
+    @apply mb-2;
+  }
+
+  .reports-milestones-title {
+    @apply text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100;
+  }
+
+  .reports-milestones-table-wrapper {
+    @apply overflow-x-auto;
+  }
+
+  .reports-milestones-table {
+    @apply min-w-full text-sm;
+  }
+
+  .reports-milestones-header-row {
+    @apply text-left text-gray-600 dark:text-gray-200;
+  }
+
+  .reports-milestones-header-cell {
+    @apply py-3 px-3;
+  }
+
+  .reports-milestones-row {
+    @apply border-t border-gray-100;
+  }
+
+  .reports-milestones-cell {
+    @apply py-3 px-3;
+  }
+
+  .reports-milestones-status-pill {
+    @apply px-2 py-1 rounded text-xs font-medium bg-yellow-50 text-yellow-700;
+  }
+
+  .reports-milestones-empty-cell {
+    @apply py-6 px-3 text-gray-500 dark:text-gray-300;
+  }
+
+  .reports-loading-message {
+    @apply mt-4 text-sm text-gray-500 dark:text-gray-300;
+  }
+
+  .reports-error-message {
+    @apply mt-2 text-sm text-red-600;
+  }
+
+  /* ========= StatCard semantic wrappers ========= */
+  .stat-card {
+    @apply card;
+  }
+
+  .stat-card-label {
+    @apply stat-label;
+  }
+
+  .stat-card-value {
+    @apply stat-value;
+  }
+
+  /* ========= Analytics page layout ========= */
+  .analytics-page-header {
+    @apply mb-6;
+  }
+
+  .analytics-summary-grid {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-6 mb-6;
+  }
+
+  .analytics-chart-grid {
+    @apply grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6;
+  }
+
+  .analytics-chart-card {
+    @apply card;
+  }
+
+  .analytics-chart-title {
+    @apply text-base font-semibold text-gray-800 mb-1 dark:text-gray-100;
+  }
+
+  .analytics-chart-subtitle {
+    @apply text-xs text-gray-500 mb-4 dark:text-gray-300;
+  }
+
+  .analytics-chart-container {
+    @apply h-64;
+  }
+
+  .analytics-risk-card {
+    @apply card mb-2;
+  }
+
+  .analytics-risk-layout {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-6 items-center;
+  }
+
+  .analytics-risk-legend {
+    @apply space-y-3 text-sm;
+  }
+
+  .analytics-risk-legend-heading {
+    @apply text-xs font-semibold text-gray-500 uppercase tracking-wide;
+  }
+
+  .analytics-risk-legend-row {
+    @apply flex items-center justify-between rounded-lg border border-gray-100 px-3 py-2;
+  }
+
+  .analytics-risk-legend-label {
+    @apply flex items-center gap-2;
+  }
+
+  .analytics-risk-legend-color-dot {
+    @apply inline-block h-2 w-2 rounded-full;
+  }
+
+  .analytics-risk-legend-text {
+    @apply text-gray-700 dark:text-gray-100;
+  }
+
+  .analytics-risk-legend-meta {
+    @apply text-xs text-gray-500 dark:text-gray-300;
+  }
+
+  .analytics-loading-message {
+    @apply mt-2 text-sm text-gray-500 dark:text-gray-300;
+  }
+
+  .analytics-error-message {
+    @apply mb-4 text-sm text-red-600;
+  }
+
+  /* ========= Teams page layout ========= */
+  .teams-toolbar {
+    @apply mb-4 flex items-center gap-3;
+  }
+
+  .teams-table-card {
+    /* card look already provided by .card in JSX */
+  }
+
+  .teams-table-wrapper {
+    @apply overflow-x-auto;
+  }
+
+  .teams-table {
+    @apply min-w-full text-sm;
+  }
+
+  .teams-table-header-row {
+    @apply text-left text-gray-600 dark:text-gray-200;
+  }
+
+  .teams-table-header-cell {
+    @apply py-3 px-3;
+  }
+
+  .teams-name-header {
+    @apply text-left;
+  }
+
+  .teams-count-header {
+    @apply text-center;
+  }
+
+  .teams-actions-header {
+    @apply text-center;
+  }
+
+  .teams-table-row {
+    @apply border-t border-gray-100;
+  }
+
+  .teams-name-cell {
+    @apply py-3 px-3 text-left;
+  }
+
+  .teams-count-cell {
+    @apply py-3 px-3 text-center;
+  }
+
+  .teams-actions-cell {
+    @apply py-3 px-3 text-center;
+  }
+
+  .teams-actions-inline {
+    @apply inline-flex items-center justify-center gap-2;
+  }
+
+  .teams-empty-state-cell {
+    @apply py-6 px-3 text-gray-500 dark:text-gray-300 text-center;
+  }
+
+  .teams-loading-message {
+    @apply mt-4 text-sm text-gray-500 dark:text-gray-300;
+  }
+
+  .teams-error-message {
+    @apply mt-2 text-sm text-red-600;
+  }
+
+  /* Teams modal */
+  .teams-modal-form {
+    @apply space-y-4;
+  }
+
+  .teams-modal-field {
+    @apply flex flex-col;
+  }
+
+  .teams-modal-label {
+    @apply block text-sm text-gray-700 mb-1;
+  }
+
+  .teams-modal-input {
+    @apply w-full rounded-md border border-gray-300 px-3 py-2
+           focus:outline-none focus:ring-2 focus:ring-blue-300
+           bg-white text-slate-900;
+  }
+
+  /* ========= App shell layout (semantic hooks) ========= */
+  .app-shell {
+    @apply flex min-h-screen bg-gray-50 dark:bg-slate-900;
+  }
+
+  .app-main-column {
+    @apply flex-1 flex flex-col;
+  }
+
+  .app-main-content {
+    @apply w-full px-4 sm:px-6 md:px-8 py-6;
+  }
+
+  /* ========= Header semantic hooks ========= */
+  .header-bar {
+    @apply sticky top-0 z-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur
+           border-b border-gray-100 dark:border-slate-700 px-6 py-3
+           flex items-center justify-between;
+  }
+
+  .header-left {
+    @apply flex items-center gap-4;
+  }
+
+  .header-actions {
+    @apply flex items-center gap-3;
+  }
+
+  .sidebar-toggle-button {
+    @apply lg:hidden text-gray-600 dark:text-gray-300
+           hover:text-blue-600 dark:hover:text-blue-400;
+  }
+
+  .theme-toggle-button {
+    @apply btn-secondary flex items-center justify-center w-10 h-10;
+  }
+
+  .refresh-button {
+    @apply btn-secondary;
+  }
+
+  .new-project-button {
+    @apply btn;
+  }
+}
+
+/* ===== Page transition (fade + slide in) ===== */
+
+@keyframes page-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.97) translateY(6px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.01) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.page-transition-container {
+  animation: page-pop-in 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+/* ===== Card pop-in animation for key panels (per-page bumps) ===== */
+
+@keyframes card-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-pop {
+  animation: card-pop 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+/* ===== Double-bump animation for Analytics top stat cards ===== */
+
+@keyframes card-pop-twice {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0) scale(1.03);
+  }
+  55% {
+    transform: translateY(0) scale(0.99);
+  }
+  80% {
+    transform: translateY(0) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-pop-twice {
+  animation: card-pop-twice 1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}

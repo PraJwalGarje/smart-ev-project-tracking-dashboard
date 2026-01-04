@@ -1,0 +1,82 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "name": "EV Battery Module",
+      "team": "Powertrain",
+      "status": "in_progress",
+      "startDate": "2025-11-26",
+      "endDate": "2026-01-21"
+    },
+    {
+      "id": 2,
+      "name": "Charging Station Integration",
+      "team": "Software",
+      "status": "completed",
+      "startDate": "2025-11-10",
+      "endDate": "2026-02-10"
+    },
+    {
+      "name": "Smart Radars",
+      "team": "Powertrain",
+      "status": "in_progress",
+      "id": 3,
+      "startDate": "2025-11-10",
+      "endDate": "2025-11-18"
+    },
+    {
+      "name": "Beep",
+      "team": "Powertrain",
+      "status": "on_hold",
+      "startDate": "2025-11-10",
+      "endDate": "2026-07-10",
+      "id": 4
+    }
+  ],
+  "teams": [
+    {
+      "id": 1,
+      "name": "Powertrain"
+    },
+    {
+      "id": 2,
+      "name": "Software"
+    },
+    {
+      "id": 3,
+      "name": "UI/UX"
+    },
+    {
+      "id": 4,
+      "name": "ADAS"
+    },
+    {
+      "id": 5,
+      "name": "Telematics"
+    },
+    {
+      "name": "Capstone",
+      "id": 6
+    }
+  ],
+  "milestones": [
+    {
+      "id": 1,
+      "title": "Battery Pack Rev B",
+      "dueDate": "2025-11-05",
+      "status": "upcoming"
+    },
+    {
+      "id": 2,
+      "title": "Fast Charge Pilot",
+      "dueDate": "2025-11-20",
+      "status": "upcoming"
+    },
+    {
+      "id": 3,
+      "title": "UI Sprint Handoff",
+      "dueDate": "2025-11-28",
+      "status": "upcoming"
+    }
+  ]
+}
