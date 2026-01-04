@@ -1,16 +1,120 @@
-# React + Vite
+# Smart EV Project Collaboration & Tracking Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+The **Smart EV Project Collaboration and Tracking Dashboard** is a modern, web-based application designed to streamline project management, analytics, and cross-team collaboration within the Smart Electric Vehicle (EV) development lifecycle.
 
-Currently, two official plugins are available:
+This project addresses a common challenge in EV product development environments where multiple technical and managerial teams operate in silos. The dashboard provides a centralized platform for monitoring project health, tracking milestones, visualizing risks, and enabling data-driven decision making through intuitive analytics.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The system is built using **React.js**, styled with **Tailwind CSS**, and integrates interactive charts to represent project health, charging activity, and maintenance risk. It supports role-based access, dark mode, and responsive design, making it suitable for both technical users and executive stakeholders.
 
-## React Compiler
+## Project Objectives
+- Design a centralized dashboard for Smart EV project tracking
+- Enable project managers to monitor milestones and timelines
+- Provide executives with high-level analytical insights
+- Allow engineers and team leads to update project progress
+- Implement role-based access control for clarity and security
+- Ensure full dark mode compatibility across all visual components
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## System Architecture (High Level)
+The application follows a modular, component-driven architecture:
 
-## Expanding the ESLint configuration
+### Frontend (React.js)
+- Component-based UI structure
+- Context API for authentication and global state
+- React Router for role-protected navigation
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Backend Simulation
+- JSON Server / mock API endpoints
+- Simulated project, milestone, and team datasets
+
+### Analytics Layer
+- Recharts-based data visualization
+- Dynamic chart rendering driven by backend data
+- Explicit theme-safe styling for dark and light modes
+
+## Tech Stack
+### Frontend
+- **React.js**
+- **React Router**
+- **Context API**
+
+### Styling
+- **Tailwind CSS**
+  - Responsive layout utilities
+  - Custom animation utilities
+
+### Data & Analytics
+- **Recharts** (Line, Bar, Pie charts)
+- Simulated backend using **JSON Server**
+
+### Tooling
+- **Vite**
+- **Git & GitHub**
+
+## User Roles & Access Control
+
+| Role     | Access Level                               |
+|----------|--------------------------------------------|
+| Employee | View dashboards and analytics             |
+| Manager  | Manage projects, view teams                |
+| Admin    | Full system access                        |
+
+Navigation and feature access are dynamically controlled using role-based route guards.
+
+## Core Features
+
+### Dashboard
+- Project summary statistics
+- Maintenance risk preview
+- Timeline widget sourced from Reports module
+
+### Analytics
+- Project Health Trend visualization
+- Charging Activity simulation
+- Maintenance Risk distribution (donut chart)
+- Dark mode safe charts and tooltips
+
+### Projects
+- Project creation and status tracking
+- Team and milestone assignment
+
+### Reports
+- Gantt-style timeline view
+- Milestone tracking and progress overview
+
+### Teams
+- Team overview and member counts
+- Unified modal-based CRUD operations
+
+### UI Enhancements
+- Dark mode toggle
+- Page and card-level animations
+- Responsive layout across devices
+
+## Getting Started
+
+### Prerequisites
+- **Node.js** (v18+ recommended)
+- **npm** or **yarn**
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/smart-ev-project-tracking-dashboard.git
+   
+2. Navigate into the project directory:
+cd smart-ev-project-tracking-dashboard
+
+3. Install dependencies:
+npm install
+
+4. Start the Parallel API + Vite development server
+npm run dev:all
+
+### Key Features of the Updated README:
+- **Headings and Subheadings**: Properly categorized sections for better readability.
+- **Tables**: Used a table for user roles to make it clearer.
+- **Code blocks**: Used for installation commands and to highlight important steps.
+  
+
+
