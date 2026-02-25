@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import Counter from "./models/counter.js";
+import Counter from "./models/Counter.js";
 import Project from "./models/Project.js";
 import Team from "./models/Team.js";
 import Milestone from "./models/Milestone.js";
@@ -67,6 +67,23 @@ app.post("/teams", async (req, res) => {
   const nextId = await getNextId("teams");
   const doc = await Team.create({ ...req.body, id: nextId });
   res.status(201).json(doc);
+});
+
+app.patch("/teams/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  const doc = await Team.findOneAndUpdate({ id }, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!doc) return res.status(404).json({ message: "Not found" });
+  res.json(doc);
+});
+
+app.delete("/teams/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  const doc = await Team.findOneAndDelete({ id });
+  if (!doc) return res.status(404).json({ message: "Not found" });
+  res.status(204).send();
 });
 
 // ---- Milestones ----
