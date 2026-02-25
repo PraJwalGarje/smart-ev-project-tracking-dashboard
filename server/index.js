@@ -3,10 +3,10 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import Counter from "./models/Counter.js";
-import Project from "./models/Project.js";
-import Team from "./models/Team.js";
-import Milestone from "./models/Milestone.js";
+import Counter from "./models/counter.js";
+import Project from "./models/project.js";
+import Team from "./models/team.js";
+import Milestone from "./models/milestone.js";
 
 dotenv.config();
 
@@ -28,6 +28,10 @@ async function getNextId(name) {
   return doc.value;
 }
 
+function isNumericId(value) {
+  return /^\d+$/.test(String(value));
+}
+
 // ---- Projects ----
 app.get("/projects", async (req, res) => {
   const docs = await Project.find().sort({ id: 1 });
@@ -41,18 +45,29 @@ app.post("/projects", async (req, res) => {
 });
 
 app.patch("/projects/:id", async (req, res) => {
-  const id = Number(req.params.id);
-  const doc = await Project.findOneAndUpdate({ id }, req.body, {
-    new: true,
-    runValidators: true
-  });
+  const key = req.params.id;
+
+  const doc = isNumericId(key)
+    ? await Project.findOneAndUpdate({ id: Number(key) }, req.body, {
+        new: true,
+        runValidators: true,
+      })
+    : await Project.findByIdAndUpdate(key, req.body, {
+        new: true,
+        runValidators: true,
+      });
+
   if (!doc) return res.status(404).json({ message: "Not found" });
   res.json(doc);
 });
 
 app.delete("/projects/:id", async (req, res) => {
-  const id = Number(req.params.id);
-  const doc = await Project.findOneAndDelete({ id });
+  const key = req.params.id;
+
+  const doc = isNumericId(key)
+    ? await Project.findOneAndDelete({ id: Number(key) })
+    : await Project.findByIdAndDelete(key);
+
   if (!doc) return res.status(404).json({ message: "Not found" });
   res.status(204).send();
 });
@@ -70,18 +85,29 @@ app.post("/teams", async (req, res) => {
 });
 
 app.patch("/teams/:id", async (req, res) => {
-  const id = Number(req.params.id);
-  const doc = await Team.findOneAndUpdate({ id }, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const key = req.params.id;
+
+  const doc = isNumericId(key)
+    ? await Team.findOneAndUpdate({ id: Number(key) }, req.body, {
+        new: true,
+        runValidators: true,
+      })
+    : await Team.findByIdAndUpdate(key, req.body, {
+        new: true,
+        runValidators: true,
+      });
+
   if (!doc) return res.status(404).json({ message: "Not found" });
   res.json(doc);
 });
 
 app.delete("/teams/:id", async (req, res) => {
-  const id = Number(req.params.id);
-  const doc = await Team.findOneAndDelete({ id });
+  const key = req.params.id;
+
+  const doc = isNumericId(key)
+    ? await Team.findOneAndDelete({ id: Number(key) })
+    : await Team.findByIdAndDelete(key);
+
   if (!doc) return res.status(404).json({ message: "Not found" });
   res.status(204).send();
 });
@@ -96,6 +122,35 @@ app.post("/milestones", async (req, res) => {
   const nextId = await getNextId("milestones");
   const doc = await Milestone.create({ ...req.body, id: nextId });
   res.status(201).json(doc);
+});
+
+// Add PATCH/DELETE for milestones too (so you don’t hit the same issue later)
+app.patch("/milestones/:id", async (req, res) => {
+  const key = req.params.id;
+
+  const doc = isNumericId(key)
+    ? await Milestone.findOneAndUpdate({ id: Number(key) }, req.body, {
+        new: true,
+        runValidators: true,
+      })
+    : await Milestone.findByIdAndUpdate(key, req.body, {
+        new: true,
+        runValidators: true,
+      });
+
+  if (!doc) return res.status(404).json({ message: "Not found" });
+  res.json(doc);
+});
+
+app.delete("/milestones/:id", async (req, res) => {
+  const key = req.params.id;
+
+  const doc = isNumericId(key)
+    ? await Milestone.findOneAndDelete({ id: Number(key) })
+    : await Milestone.findByIdAndDelete(key);
+
+  if (!doc) return res.status(404).json({ message: "Not found" });
+  res.status(204).send();
 });
 
 const PORT = process.env.PORT || 4000;
