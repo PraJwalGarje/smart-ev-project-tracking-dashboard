@@ -51,7 +51,7 @@ export async function updateProject(id, data) {
   return parseResponse(res, "updateProject");
 }
 
-// ---- Teams CRUD (THIS fixes your build) ----
+// ---- Teams CRUD ----
 export async function addTeam(data) {
   const res = await fetch(`${BASE}/teams`, {
     method: "POST",
