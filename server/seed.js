@@ -4,9 +4,9 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 import Counter from "./models/counter.js";
-import Project from "./models/Project.js";
-import Team from "./models/Team.js";
-import Milestone from "./models/Milestone.js";
+import Project from "./models/project.js";
+import Team from "./models/team.js";
+import Milestone from "./models/milestone.js";
 
 dotenv.config();
 
@@ -32,7 +32,6 @@ async function seed() {
   await Team.insertMany(teams);
   await Milestone.insertMany(milestones);
 
-  // set counters so new inserts continue from max id
   const maxProjectId = projects.reduce((m, x) => Math.max(m, x.id || 0), 0);
   const maxTeamId = teams.reduce((m, x) => Math.max(m, x.id || 0), 0);
   const maxMilestoneId = milestones.reduce((m, x) => Math.max(m, x.id || 0), 0);
