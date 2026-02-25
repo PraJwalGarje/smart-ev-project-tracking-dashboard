@@ -1,31 +1,28 @@
-// src/pages/Teams.jsx
-import React, { useEffect, useMemo, useState } from 'react';
-import { getTeams, getProjects } from '../api/api.js';
-import Modal from '../components/Modal.jsx';
-import toast from 'react-hot-toast';
-
-const BASE = 'http://localhost:4000';
+import React, { useEffect, useMemo, useState } from "react";
+import { getTeams, getProjects, addTeam, deleteTeam } from "../api/api.js";
+import Modal from "../components/Modal.jsx";
+import toast from "react-hot-toast";
 
 export default function Teams() {
   const [teams, setTeams] = useState([]);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState('');
+  const [err, setErr] = useState("");
 
   // Modal state
   const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
-  const [teamName, setTeamName] = useState('');
+  const [teamName, setTeamName] = useState("");
 
   async function load() {
     setLoading(true);
-    setErr('');
+    setErr("");
     try {
       const [t, p] = await Promise.all([getTeams(), getProjects()]);
       setTeams(t);
       setProjects(p);
     } catch (e) {
-      setErr('Failed to load teams.');
-      toast.error('Failed to load teams');
+      setErr("Failed to load teams.");
+      toast.error("Failed to load teams");
     } finally {
       setLoading(false);
     }
@@ -47,29 +44,8 @@ export default function Teams() {
   }, [teams, projects]);
 
   function openAddTeamModal() {
-    setTeamName('');
+    setTeamName("");
     setIsTeamModalOpen(true);
-  }
-
-  async function addTeamLocal(name) {
-    const response = await fetch(`${BASE}/teams`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Add team failed');
-    }
-
-    return response.json();
-  }
-
-  async function deleteTeamLocal(id) {
-    const response = await fetch(`${BASE}/teams/${id}`, { method: 'DELETE' });
-    if (!response.ok) {
-      throw new Error('Delete team failed');
-    }
   }
 
   async function handleSubmitTeam(event) {
@@ -77,27 +53,27 @@ export default function Teams() {
     const name = teamName.trim();
 
     if (!name) {
-      return toast('Please enter a team name.', { icon: '⚠️' });
+      return toast("Please enter a team name.", { icon: "⚠️" });
     }
 
     try {
-      await addTeamLocal(name);
-      toast.success('Team added');
+      await addTeam({ name });
+      toast.success("Team added");
       setIsTeamModalOpen(false);
       await load();
     } catch {
-      toast.error('Add failed');
+      toast.error("Add failed");
     }
   }
 
   async function handleDeleteTeam(id) {
-    if (!confirm('Delete this team?')) return;
+    if (!confirm("Delete this team?")) return;
     try {
-      await deleteTeamLocal(id);
-      toast.success('Team deleted');
+      await deleteTeam(id);
+      toast.success("Team deleted");
       await load();
     } catch {
-      toast.error('Delete failed');
+      toast.error("Delete failed");
     }
   }
 
@@ -137,19 +113,16 @@ export default function Teams() {
             </thead>
             <tbody>
               {teams.map((team) => (
-                <tr key={team.id} className="teams-table-row">
-                  <td className="teams-name-cell">
-                    {team.name}
-                  </td>
+                <tr key={team.id ?? team._id} className="teams-table-row">
+                  <td className="teams-name-cell">{team.name}</td>
                   <td className="teams-count-cell">
                     {projectCountByTeam.get(team.name) ?? 0}
                   </td>
                   <td className="teams-actions-cell">
                     <div className="teams-actions-inline">
-                      {/* Edit could be added later */}
                       <button
                         className="btn"
-                        onClick={() => handleDeleteTeam(team.id)}
+                        onClick={() => handleDeleteTeam(team.id ?? team._id)}
                       >
                         Delete
                       </button>
@@ -169,16 +142,8 @@ export default function Teams() {
           </table>
         </div>
 
-        {loading && (
-          <div className="teams-loading-message">
-            Loading…
-          </div>
-        )}
-        {err && (
-          <div className="teams-error-message">
-            {err}
-          </div>
-        )}
+        {loading && <div className="teams-loading-message">Loading…</div>}
+        {err && <div className="teams-error-message">{err}</div>}
       </div>
 
       {/* New Team modal */}
@@ -202,9 +167,7 @@ export default function Teams() {
       >
         <form className="teams-modal-form" onSubmit={handleSubmitTeam}>
           <div className="teams-modal-field">
-            <label className="teams-modal-label">
-              Team Name
-            </label>
+            <label className="teams-modal-label">Team Name</label>
             <input
               type="text"
               className="teams-modal-input"
