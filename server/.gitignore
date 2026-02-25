@@ -12,6 +12,7 @@ coverage
 .env
 .env.local
 .env.*.local
+server/.env
 
 # logs and debug files
 npm-debug.log*
