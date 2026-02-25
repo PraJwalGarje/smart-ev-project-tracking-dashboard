@@ -84,13 +84,6 @@ export default function Header({
           Refresh
         </button>
 
-        {/* New Project (only when logged in + manager/admin) */}
-        {isLoggedIn && canManageProjects && (
-          <button className="new-project-button btn" onClick={onNewProject}>
-            New Project
-          </button>
-        )}
-
         {/* 🔹 Auth button */}
         {!isLoggedIn ? (
           <button
