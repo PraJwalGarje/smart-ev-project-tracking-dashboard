@@ -10,8 +10,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "api": "json-server --watch db.json --port 4000 --delay 400",
-    "dev:all": "npm-run-all --parallel api dev"
+
+    "api": "npm --prefix server run start",
+    "api:dev": "npm --prefix server run dev",
+    "seed": "npm --prefix server run seed",
+
+    "dev:all": "npm-run-all --parallel api:dev dev"
   },
   "dependencies": {
     "dayjs": "^1.11.19",
@@ -25,7 +29,6 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.20",
-    "json-server": "^0.17.4",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.47",
     "tailwindcss": "3.4.14",
