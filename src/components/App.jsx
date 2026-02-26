@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
-
 import Header from './Header.jsx';
 import Sidebar from './Sidebar.jsx';
-
 import Dashboard from '../pages/Dashboard.jsx';
 import Projects from '../pages/Projects.jsx';
 import Reports from '../pages/Reports.jsx';
 import Teams from '../pages/Teams.jsx';
 import Analytics from '../pages/Analytics.jsx';
 import Login from '../pages/Login.jsx';
-
 import { addProject } from '../api/api.js';
 
 // Auth context + route guard
@@ -28,7 +25,6 @@ export default function App() {
   // Theme: 'light' | 'dark'
   const [theme, setTheme] = useState('light');
 
-  // 🔹 location for route based transitions
   const location = useLocation();
 
   // Auto-close drawer on desktop resize
@@ -39,6 +35,11 @@ export default function App() {
     desktopMediaQuery.addEventListener?.('change', handleResize);
     return () => desktopMediaQuery.removeEventListener?.('change', handleResize);
   }, []);
+
+  // Close mobile drawer on route change 
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
 
   // On mount: read theme from localStorage or system preference
   useEffect(() => {
@@ -69,10 +70,10 @@ export default function App() {
   }, [theme]);
 
   function handleToggleTheme() {
-    setTheme(previousTheme => (previousTheme === 'dark' ? 'light' : 'dark'));
+    setTheme((previousTheme) => (previousTheme === 'dark' ? 'light' : 'dark'));
   }
 
-  // Header action: quick add 
+  // Header action: quick add
   async function handleNewProject() {
     const name = prompt('Project name? (e.g., Smart Navigation UI)');
     if (!name) return;
@@ -88,7 +89,7 @@ export default function App() {
         status: 'in_progress',
       });
       toast.success('Project added', { id: savingToastId });
-      setReloadKey(current => current + 1); // trigger dashboard re-fetch
+      setReloadKey((current) => current + 1);
     } catch (error) {
       toast.error('Failed to add project', { id: savingToastId });
     }
@@ -96,7 +97,7 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <div className="app-shell flex min-h-screen bg-gray-50 dark:bg-slate-900">
+      <div className="app-shell">
         {/* Global toaster */}
         <Toaster
           position="top-right"
@@ -110,17 +111,15 @@ export default function App() {
         <Sidebar open={mobileOpen} onClose={() => setMobileOpen(false)} />
 
         {/* Main column */}
-        <div className="app-main-column flex-1 flex flex-col">
+        <div className="app-main-column">
           <Header
-            onToggleSidebar={() => setMobileOpen(isOpen => !isOpen)}
+            onToggleSidebar={() => setMobileOpen((isOpen) => !isOpen)}
             onNewProject={handleNewProject}
             theme={theme}
             onToggleTheme={handleToggleTheme}
           />
 
-          {/* Full-width content so Analytics / charts can use all available space */}
-          <main className="app-main-content w-full px-4 sm:px-6 md:px-8 py-6">
-            {/* 🔹 Single transition wrapper keyed by route path */}
+          <main className="app-main-content">
             <PageTransition key={location.pathname}>
               <Routes location={location}>
                 {/* Public route */}
@@ -135,6 +134,7 @@ export default function App() {
                     </RequireAuth>
                   }
                 />
+
                 <Route
                   path="/projects"
                   element={
@@ -143,6 +143,7 @@ export default function App() {
                     </RequireAuth>
                   }
                 />
+
                 <Route
                   path="/reports"
                   element={
@@ -151,6 +152,7 @@ export default function App() {
                     </RequireAuth>
                   }
                 />
+
                 <Route
                   path="/teams"
                   element={
@@ -159,6 +161,7 @@ export default function App() {
                     </RequireAuth>
                   }
                 />
+
                 <Route
                   path="/analytics"
                   element={
