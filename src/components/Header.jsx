@@ -36,7 +36,10 @@ export default function Header({
           <span className="text-2xl">☰</span>
         </button>
 
-        <h1 className="header-title truncate">Smart EV Dashboard</h1>
+        {/* Hide full title on mobile to prevent clustering */}
+        <h1 className="header-title hidden sm:block truncate">
+          Smart EV Dashboard
+        </h1>
       </div>
 
       {/* Right section */}
@@ -71,7 +74,11 @@ export default function Header({
           className="theme-toggle-button"
           type="button"
         >
-          {isDarkMode ? <span className="text-xl">☀️</span> : <span className="text-xl">🌙</span>}
+          {isDarkMode ? (
+            <span className="text-xl">☀️</span>
+          ) : (
+            <span className="text-xl">🌙</span>
+          )}
         </button>
 
         {/* Refresh: icon only on mobile */}
