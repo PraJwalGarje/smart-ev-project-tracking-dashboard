@@ -1,24 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-
-import {
-  getProjects,
-  getTeams,
-  getMilestones,
-} from '../api/api.js';
-
+import { getProjects, getTeams, getMilestones } from '../api/api.js';
 import StatCard from '../components/StatCard.jsx';
 import TimelineGantt from '../components/TimelineGantt.jsx';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
-// Recharts pieces for the maintenance donut
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-} from 'recharts';
-
-// Utility to translate project status to a rough health bucket
 function buildRiskBuckets(projects) {
   let healthy = 0;
   let monitor = 0;
@@ -100,7 +86,7 @@ export default function Dashboard({ reloadKey = 0 }) {
     return () => controller.abort();
   }, []);
 
-  // Reload when quick-add in header fires
+  // Reload when quick add in header fires
   useEffect(() => {
     if (!reloadKey) return;
     const controller = new AbortController();
@@ -110,10 +96,7 @@ export default function Dashboard({ reloadKey = 0 }) {
 
   // ---------- Derived data: Maintenance risk & Gantt tasks ----------
 
-  const riskBuckets = useMemo(
-    () => buildRiskBuckets(projects),
-    [projects],
-  );
+  const riskBuckets = useMemo(() => buildRiskBuckets(projects), [projects]);
 
   const ganttTasks = useMemo(() => {
     const chooseColorForStatus = (status) => {
@@ -149,30 +132,20 @@ export default function Dashboard({ reloadKey = 0 }) {
   }, [projects]);
 
   return (
-    <>
-      <h1 className="page-title">
-        Smart EV Project Tracking Dashboard
-      </h1>
+    <div style={{ minWidth: 0 }}>
+      <h1 className="page-title">Smart EV Project Tracking Dashboard</h1>
 
       <p className="page-subtitle">
-        Welcome to your centralized workspace for managing Smart EV
-        product development. Here you can quickly see how many projects,
-        teams, and milestones are in the system, plus a quick view of
-        project risk and the overall delivery timeline.
+        Welcome to your centralized workspace for managing Smart EV product
+        development. Here you can quickly see how many projects, teams, and
+        milestones are in the system, plus a quick view of project risk and the
+        overall delivery timeline.
       </p>
 
       {/* Summary cards */}
-      <div className="dashboard-stat-grid">
-        <StatCard
-          label="Active Projects"
-          value={stats.projects}
-          tone="primary"
-        />
-        <StatCard
-          label="Teams Involved"
-          value={stats.teams}
-          tone="success"
-        />
+      <div className="dashboard-stat-grid" style={{ minWidth: 0 }}>
+        <StatCard label="Active Projects" value={stats.projects} tone="primary" />
+        <StatCard label="Teams Involved" value={stats.teams} tone="success" />
         <StatCard
           label="Upcoming Milestones"
           value={stats.milestones}
@@ -181,48 +154,53 @@ export default function Dashboard({ reloadKey = 0 }) {
       </div>
 
       {/* Secondary row: Timeline + Maintenance risk */}
-      <section className="dashboard-secondary-grid">
+      <section className="dashboard-secondary-grid" style={{ minWidth: 0 }}>
         {/* Timeline (compact Gantt) */}
-        <div className="card dashboard-timeline-card">
+        <div className="card dashboard-timeline-card" style={{ minWidth: 0 }}>
           <header className="dashboard-section-header">
-            <h2 className="dashboard-section-title">
-              Current Project Timeline
-            </h2>
+            <h2 className="dashboard-section-title">Current Project Timeline</h2>
             <p className="dashboard-section-subtitle">
               Production Timeline Gantt view for projects with start and end dates.
             </p>
           </header>
 
           {ganttTasks.length > 0 ? (
-            <div className="dashboard-timeline-wrapper">
-              <TimelineGantt
-                view="Week"
-                tasks={ganttTasks}
-                height={40}
-              />
+            <div
+              className="dashboard-timeline-wrapper"
+              style={{
+                minWidth: 0,
+                overflowX: 'auto',
+                WebkitOverflowScrolling: 'touch',
+              }}
+            >
+              <TimelineGantt view="Week" tasks={ganttTasks} height={40} />
             </div>
           ) : (
             <p className="dashboard-empty-message">
-              No projects with dates to visualize yet. Add{' '}
-              <em>Start Date</em> and <em>End Date</em> on the Projects
-              page to see the timeline here.
+              No projects with dates to visualize yet. Add <em>Start Date</em> and{' '}
+              <em>End Date</em> on the Projects page to see the timeline here.
             </p>
           )}
         </div>
 
         {/* Maintenance risk donut */}
-        <div className="card dashboard-maintenance-card">
+        <div className="card dashboard-maintenance-card" style={{ minWidth: 0 }}>
           <header className="dashboard-section-header">
-            <h2 className="dashboard-section-title">
-              Maintenance Risk Snapshot
-            </h2>
+            <h2 className="dashboard-section-title">Maintenance Risk Snapshot</h2>
             <p className="dashboard-section-subtitle">
               How your projects are distributed across risk categories.
             </p>
           </header>
 
-          <div className="dashboard-maintenance-layout">
-            <div className="dashboard-maintenance-chart">
+          <div className="dashboard-maintenance-layout" style={{ minWidth: 0 }}>
+            <div
+              className="dashboard-maintenance-chart"
+              style={{
+                width: '100%',
+                height: 240,
+                minWidth: 0,
+              }}
+            >
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -235,18 +213,15 @@ export default function Dashboard({ reloadKey = 0 }) {
                     outerRadius="80%"
                     paddingAngle={3}
                   >
-                    {riskBuckets.map((bucket, index) => (
-                      <Cell
-                        key={bucket.name}
-                        fill={bucket.color}
-                      />
+                    {riskBuckets.map((bucket) => (
+                      <Cell key={bucket.name} fill={bucket.color} />
                     ))}
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
             </div>
 
-            <div className="dashboard-maintenance-legend">
+            <div className="dashboard-maintenance-legend" style={{ minWidth: 0 }}>
               <h3 className="dashboard-maintenance-legend-title">
                 Distribution based on project status
               </h3>
@@ -255,8 +230,12 @@ export default function Dashboard({ reloadKey = 0 }) {
                 <div
                   key={bucket.name}
                   className="dashboard-maintenance-legend-row"
+                  style={{ minWidth: 0 }}
                 >
-                  <div className="dashboard-maintenance-legend-label">
+                  <div
+                    className="dashboard-maintenance-legend-label"
+                    style={{ minWidth: 0 }}
+                  >
                     <span
                       className="dashboard-maintenance-legend-dot"
                       style={{ backgroundColor: bucket.color }}
@@ -265,11 +244,10 @@ export default function Dashboard({ reloadKey = 0 }) {
                       {bucket.name}
                     </span>
                   </div>
+
                   <div className="dashboard-maintenance-legend-meta">
-                    {bucket.value} project
-                    {bucket.value !== 1 ? 's' : ''} (
-                    {bucket.percent}
-                    %)
+                    {bucket.value} project{bucket.value !== 1 ? 's' : ''} (
+                    {bucket.percent}%)
                   </div>
                 </div>
               ))}
@@ -278,17 +256,11 @@ export default function Dashboard({ reloadKey = 0 }) {
         </div>
       </section>
 
-      {loading && (
-        <div className="dashboard-loading-message">
-          Refreshing…
-        </div>
-      )}
+      {loading && <div className="dashboard-loading-message">Refreshing…</div>}
 
       {errorMessage && (
-        <div className="dashboard-error-message">
-          {errorMessage}
-        </div>
+        <div className="dashboard-error-message">{errorMessage}</div>
       )}
-    </>
+    </div>
   );
 }
