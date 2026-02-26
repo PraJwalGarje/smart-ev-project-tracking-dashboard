@@ -10,7 +10,7 @@ body,
 }
 
 body {
-  scrollbar-gutter: stable; 
+  scrollbar-gutter: stable;
 }
 
 /* Hide scrollbar helper */
@@ -27,8 +27,8 @@ body {
   /* Cards / stats */
   .card {
     @apply bg-white p-4 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow
-         ring-1 ring-gray-100;
-}
+         ring-1 ring-gray-100 min-w-0;
+  }
 
   .stat-grid {
     @apply grid grid-cols-1 md:grid-cols-3 gap-6;
@@ -91,7 +91,7 @@ body {
 
   /* Page headings */
   .page-title {
-    @apply text-2xl font-bold text-blue-600 mb-2 tracking-tight;
+    @apply text-2xl sm:text-3xl font-bold text-blue-600 mb-2 tracking-tight;
   }
   .page-subtitle {
     @apply text-gray-700 mb-8;
@@ -221,7 +221,7 @@ body {
   }
 
   .dashboard-maintenance-chart {
-    @apply h-52 sm:h-64 w-full max-w-xs mx-auto;
+    @apply h-52 sm:h-64 w-full max-w-xs mx-auto min-w-0;
   }
 
   @media (min-width: 768px) {
@@ -399,8 +399,9 @@ body {
     @apply mb-6;
   }
 
+  /* UPDATED: allow stacking on mobile */
   .reports-toolbar {
-    @apply mb-4 flex items-center gap-3;
+    @apply mb-4 flex flex-col sm:flex-row sm:items-center gap-3;
   }
 
   .reports-status-grid {
@@ -412,8 +413,9 @@ body {
     @apply mb-3;
   }
 
+  /* UPDATED: allow wrapping/stacking on mobile */
   .reports-gantt-header {
-    @apply flex items-center justify-between mb-4;
+    @apply flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4;
   }
 
   .reports-gantt-title {
@@ -680,16 +682,16 @@ body {
   /* ========= Header semantic hooks ========= */
   .header-bar {
     @apply sticky top-0 z-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur
-           border-b border-gray-100 dark:border-slate-700 px-6 py-3
-           flex items-center justify-between;
+           border-b border-gray-100 dark:border-slate-700 px-4 sm:px-6 py-3
+           flex items-center justify-between min-w-0;
   }
 
   .header-left {
-    @apply flex items-center gap-4;
+    @apply flex items-center gap-3 min-w-0;
   }
 
   .header-actions {
-    @apply flex items-center gap-3;
+    @apply flex items-center gap-2 sm:gap-3 min-w-0;
   }
 
   .sidebar-toggle-button {
@@ -730,6 +732,8 @@ body {
 .page-transition-container {
   animation: page-pop-in 260ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 /* ===== Card pop-in animation for key panels (per-page bumps) ===== */
