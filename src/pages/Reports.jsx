@@ -121,9 +121,7 @@ export default function Reports() {
     const csv = [headers, ...rows]
       .map((row) =>
         row
-          .map((cell) =>
-            `"${String(cell ?? '').replace(/"/g, '""')}"`
-          )
+          .map((cell) => `"${String(cell ?? '').replace(/"/g, '""')}"`)
           .join(',')
       )
       .join('\n');
@@ -147,11 +145,13 @@ export default function Reports() {
           Overview of project status, visual timeline, and upcoming milestones.
         </p>
 
-        <div className="reports-toolbar">
-          <button className="btn-secondary" onClick={load}>
+        {/* Toolbar: stack on mobile, row on sm+ */}
+        <div className="reports-toolbar flex flex-col sm:flex-row sm:items-center gap-3">
+          <button className="btn-secondary w-full sm:w-auto" onClick={load}>
             Refresh
           </button>
-          <button className="btn" onClick={exportProjectsCSV}>
+
+          <button className="btn w-full sm:w-auto" onClick={exportProjectsCSV}>
             Export Projects CSV
           </button>
         </div>
@@ -159,33 +159,18 @@ export default function Reports() {
 
       {/* Status summary cards */}
       <div className="stat-grid reports-status-grid">
-        <StatCard
-          label="In Progress"
-          value={statusCounts.in_progress}
-          tone="primary"
-        />
-        <StatCard
-          label="Completed"
-          value={statusCounts.completed}
-          tone="success"
-        />
-        <StatCard
-          label="On Hold"
-          value={statusCounts.on_hold}
-          tone="warning"
-        />
+        <StatCard label="In Progress" value={statusCounts.in_progress} tone="primary" />
+        <StatCard label="Completed" value={statusCounts.completed} tone="success" />
+        <StatCard label="On Hold" value={statusCounts.on_hold} tone="warning" />
       </div>
 
       {/* Timeline (Gantt) section */}
       <div className="reports-gantt-card card">
-        <div className="reports-gantt-header">
-          <h3 className="reports-gantt-title">
-            Production Timeline
-          </h3>
-          <div className="reports-gantt-view">
-            <label className="reports-gantt-view-label">
-              View:
-            </label>
+        <div className="reports-gantt-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <h3 className="reports-gantt-title">Production Timeline</h3>
+
+          <div className="reports-gantt-view flex items-center gap-2">
+            <label className="reports-gantt-view-label">View:</label>
             <select
               className="reports-gantt-view-select"
               value={normalizedView}
@@ -210,17 +195,15 @@ export default function Reports() {
           </div>
         ) : (
           <div className="reports-gantt-empty-message">
-            No projects with dates to visualize. Add{' '}
-            <em>Start Date</em> and <em>End Date</em> in Projects.
+            No projects with dates to visualize. Add <em>Start Date</em> and <em>End Date</em> in
+            Projects.
           </div>
         )}
       </div>
 
       {/* Upcoming milestones table */}
       <div className="reports-milestones-card card">
-        <h3 className="reports-milestones-title">
-          Upcoming Milestones
-        </h3>
+        <h3 className="reports-milestones-title">Upcoming Milestones</h3>
 
         <div className="reports-milestones-table-wrapper">
           <table className="reports-milestones-table">
@@ -233,17 +216,10 @@ export default function Reports() {
             </thead>
             <tbody>
               {upcomingMilestones.map((milestone) => (
-                <tr
-                  key={milestone.id}
-                  className="reports-milestones-row"
-                >
+                <tr key={milestone.id} className="reports-milestones-row">
+                  <td className="reports-milestones-cell">{milestone.title}</td>
                   <td className="reports-milestones-cell">
-                    {milestone.title}
-                  </td>
-                  <td className="reports-milestones-cell">
-                    {milestone.dueDate
-                      ? new Date(milestone.dueDate).toLocaleDateString()
-                      : '—'}
+                    {milestone.dueDate ? new Date(milestone.dueDate).toLocaleDateString() : '—'}
                   </td>
                   <td className="reports-milestones-cell">
                     <span className="reports-milestones-status-pill">
@@ -255,10 +231,7 @@ export default function Reports() {
 
               {!loading && !upcomingMilestones.length && (
                 <tr>
-                  <td
-                    className="reports-milestones-empty-cell"
-                    colSpan={3}
-                  >
+                  <td className="reports-milestones-empty-cell" colSpan={3}>
                     No upcoming milestones.
                   </td>
                 </tr>
@@ -267,17 +240,9 @@ export default function Reports() {
           </table>
         </div>
 
-        {loading && (
-          <div className="reports-loading-message">
-            Loading…
-          </div>
-        )}
+        {loading && <div className="reports-loading-message">Loading…</div>}
 
-        {err && (
-          <div className="reports-error-message">
-            {err}
-          </div>
-        )}
+        {err && <div className="reports-error-message">{err}</div>}
       </div>
     </>
   );
