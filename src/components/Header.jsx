@@ -36,9 +36,7 @@ export default function Header({
           <span className="text-2xl">☰</span>
         </button>
 
-        <h1 className="header-title truncate">
-          Smart EV Dashboard
-        </h1>
+        <h1 className="header-title truncate">Smart EV Dashboard</h1>
       </div>
 
       {/* Right section */}
@@ -54,8 +52,9 @@ export default function Header({
               .join('') || 'U'}
           </div>
 
-          <div className="flex flex-col leading-tight min-w-0">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate max-w-[10rem] sm:max-w-[14rem]">
+          {/* Hide name + role on mobile to reduce header crowding */}
+          <div className="hidden sm:flex flex-col leading-tight min-w-0">
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate max-w-[14rem]">
               {userName}
             </span>
 
@@ -72,11 +71,7 @@ export default function Header({
           className="theme-toggle-button"
           type="button"
         >
-          {isDarkMode ? (
-            <span className="text-xl">☀️</span>
-          ) : (
-            <span className="text-xl">🌙</span>
-          )}
+          {isDarkMode ? <span className="text-xl">☀️</span> : <span className="text-xl">🌙</span>}
         </button>
 
         {/* Refresh: icon only on mobile */}
