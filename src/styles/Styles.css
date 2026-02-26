@@ -3,34 +3,51 @@
 @tailwind utilities;
 
 /* ---------- Global layout stability ---------- */
-html, body, #root { height: 100%; }
-body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollbar appears */
-
-/* Optional: smooth anchor scrolling (uncomment if you want it) */
-/* html { scroll-behavior: smooth; } */
-
-/* Hide scrollbar helper (use with care) */
-.hide-scrollbar {
-  -ms-overflow-style: none;  /* IE/Edge */
-  scrollbar-width: none;     /* Firefox */
+html,
+body,
+#root {
+  height: 100%;
 }
-.hide-scrollbar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
+body {
+  scrollbar-gutter: stable; 
+}
 
-/* ========= Tailwind v3-safe custom components ========= */
+/* Hide scrollbar helper */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+} /* Chrome/Safari */
+
+/* ========= Tailwind v3 custom components ========= */
 @layer components {
   /* Cards / stats */
   .card {
     @apply bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow
-           ring-1 ring-gray-100;
+           ring-1 ring-gray-100 min-w-0;
   }
 
-  .stat-grid   { @apply grid grid-cols-1 md:grid-cols-3 gap-6; }
-  .stat-label  { @apply text-sm text-gray-500; }
-  .stat-value  { @apply text-3xl font-bold mt-2 tracking-tight; }
-  .stat-primary { @apply text-blue-600; }
-  .stat-success { @apply text-green-600; }
-  .stat-warning { @apply text-yellow-600; }
+  .stat-grid {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+  }
+  .stat-label {
+    @apply text-sm text-gray-500;
+  }
+  .stat-value {
+    @apply text-3xl font-bold mt-2 tracking-tight;
+  }
+  .stat-primary {
+    @apply text-blue-600;
+  }
+  .stat-success {
+    @apply text-green-600;
+  }
+  .stat-warning {
+    @apply text-yellow-600;
+  }
 
   /* Buttons */
   .btn {
@@ -50,27 +67,45 @@ body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollb
     @apply sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-gray-100
            px-6 py-3 flex items-center justify-between;
   }
-  .header-title   { @apply text-xl font-semibold text-gray-800 tracking-tight; }
-  .header-actions { @apply flex items-center gap-3; }
+  .header-title {
+    @apply text-xl font-semibold text-gray-800 tracking-tight;
+  }
+  .header-actions {
+    @apply flex items-center gap-3;
+  }
 
-  /* Sidebar (static desktop styles only; mobile drawer uses inline Tailwind in JSX) */
-  .sidebar-title { @apply text-lg font-semibold mb-4; }
-  .nav           { @apply flex flex-col gap-1.5; }
+  /* Sidebar (static desktop styles only) */
+  .sidebar-title {
+    @apply text-lg font-semibold mb-4;
+  }
+  .nav {
+    @apply flex flex-col gap-1.5;
+  }
   .nav-link {
     @apply block rounded-md px-3 py-2 text-gray-700
            hover:bg-blue-50 hover:text-blue-700 transition-colors;
   }
-  .nav-link.is-active { @apply bg-blue-50 text-blue-700 font-medium; }
+  .nav-link.is-active {
+    @apply bg-blue-50 text-blue-700 font-medium;
+  }
 
   /* Page headings */
-  .page-title    { @apply text-3xl font-bold text-blue-600 mb-2 tracking-tight; }
-  .page-subtitle { @apply text-gray-700 mb-8; }
+  .page-title {
+    @apply text-3xl font-bold text-blue-600 mb-2 tracking-tight;
+  }
+  .page-subtitle {
+    @apply text-gray-700 mb-8;
+  }
 
   /* Layout container */
-  .container-main { @apply max-w-7xl mx-auto px-4 sm:px-6 md:px-8; }
+  .container-main {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 md:px-8;
+  }
 
   /* Helpers */
-  .section-divider { @apply mt-8 mb-6 h-px bg-gray-100; }
+  .section-divider {
+    @apply mt-8 mb-6 h-px bg-gray-100;
+  }
 
   /* ===================== DARK MODE TWEAKS ===================== */
 
@@ -79,8 +114,6 @@ body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollb
     @apply bg-slate-900/80 hover:bg-slate-900 hover:shadow-md
            ring-1 ring-slate-700 text-slate-100;
   }
-
-  /* Make all the usual gray text utilities lighter in dark mode */
   .dark .text-gray-500,
   .dark .text-gray-600,
   .dark .text-gray-700,
@@ -125,7 +158,6 @@ body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollb
 
   /* ========= GLOBAL SELECT STYLING (ALWAYS READABLE) ========= */
 
-  /* All dropdowns: white background + black text in both themes */
   select {
     @apply bg-white text-black;
   }
@@ -171,7 +203,6 @@ body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollb
   }
 
   .dashboard-timeline-card {
-    /* card look is provided by .card in JSX */
   }
 
   .dashboard-timeline-wrapper {
@@ -183,7 +214,6 @@ body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollb
   }
 
   .dashboard-maintenance-card {
-    /* card already applied in JSX */
   }
 
   .dashboard-maintenance-layout {
@@ -191,11 +221,17 @@ body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollb
   }
 
   .dashboard-maintenance-chart {
-    @apply h-64 w-full max-w-xs mx-auto;
+    @apply h-64 w-full min-w-0;
+  }
+
+  @media (min-width: 768px) {
+    .dashboard-maintenance-chart {
+      @apply max-w-xs mx-auto;
+    }
   }
 
   .dashboard-maintenance-legend {
-    @apply space-y-3 text-sm;
+    @apply space-y-3 text-sm min-w-0;
   }
 
   .dashboard-maintenance-legend-title {
@@ -205,11 +241,11 @@ body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollb
 
   .dashboard-maintenance-legend-row {
     @apply flex items-center justify-between rounded-lg border border-gray-100
-           px-3 py-2;
+           px-3 py-2 min-w-0;
   }
 
   .dashboard-maintenance-legend-label {
-    @apply flex items-center gap-2;
+    @apply flex items-center gap-2 min-w-0;
   }
 
   .dashboard-maintenance-legend-dot {
@@ -217,7 +253,7 @@ body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollb
   }
 
   .dashboard-maintenance-legend-name {
-    @apply text-gray-700 dark:text-gray-100;
+    @apply text-gray-700 dark:text-gray-100 truncate;
   }
 
   .dashboard-maintenance-legend-meta {
@@ -289,7 +325,6 @@ body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollb
   }
 
   .projects-table-card {
-    /* card base already applied by .card in JSX */
   }
 
   .projects-table-wrapper {
@@ -548,7 +583,6 @@ body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollb
   }
 
   .teams-table-card {
-    /* card look already provided by .card in JSX */
   }
 
   .teams-table-wrapper {
@@ -632,15 +666,15 @@ body { scrollbar-gutter: stable; } /* prevents width shift when vertical scrollb
 
   /* ========= App shell layout (semantic hooks) ========= */
   .app-shell {
-    @apply flex min-h-screen bg-gray-50 dark:bg-slate-900;
+    @apply flex min-h-screen bg-gray-50 dark:bg-slate-900 overflow-x-hidden;
   }
 
   .app-main-column {
-    @apply flex-1 flex flex-col;
+    @apply flex-1 flex flex-col min-w-0;
   }
 
   .app-main-content {
-    @apply w-full px-4 sm:px-6 md:px-8 py-6;
+    @apply w-full px-4 sm:px-6 md:px-8 py-6 min-w-0;
   }
 
   /* ========= Header semantic hooks ========= */
