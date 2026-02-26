@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
 function SidebarContent({ onNav }) {
   const { user } = useAuth() || {};
-  const userRole = user?.role || 'employee'; // default to lowest role
+  const userRole = user?.role || 'employee';
 
   const baseClasses = 'block rounded-md px-3 py-2 transition-colors';
 
@@ -23,7 +23,7 @@ function SidebarContent({ onNav }) {
 
   function renderNavItem(label, to, { end = false, requiredRoles = [] } = {}) {
     const isAllowed = userCanAccess(requiredRoles);
-    if (!isAllowed) return null; // 🔹 hide item completely
+    if (!isAllowed) return null;
 
     return (
       <NavLink
@@ -50,24 +50,18 @@ function SidebarContent({ onNav }) {
 
       {user && (
         <p className="mb-4 text-xs text-gray-500 dark:text-gray-300">
-          Signed in as <span className="font-medium">{user.name}</span>{' '}
-          (<span className="capitalize">{userRole}</span>)
+          Signed in as <span className="font-medium">{user.name}</span> (
+          <span className="capitalize">{userRole}</span>)
         </p>
       )}
 
       <nav className="flex flex-col gap-1.5">
         {renderNavItem('Dashboard', '/', { end: true })}
-
-        {/* Manager / Admin only */}
         {renderNavItem('Projects', '/projects', {
           requiredRoles: ['manager', 'admin'],
         })}
-
-        {/* Everyone can view Reports and Analytics */}
         {renderNavItem('Reports', '/reports')}
         {renderNavItem('Analytics', '/analytics')}
-
-        {/* Manager / Admin only */}
         {renderNavItem('Teams', '/teams', {
           requiredRoles: ['manager', 'admin'],
         })}
@@ -77,6 +71,15 @@ function SidebarContent({ onNav }) {
 }
 
 export default function Sidebar({ open, onClose }) {
+  // Close on Escape (mobile + desktop keyboards)
+  useEffect(() => {
+    function onKeyDown(e) {
+      if (e.key === 'Escape' && open) onClose?.();
+    }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [open, onClose]);
+
   return (
     <>
       {/* Mobile drawer */}
@@ -86,20 +89,38 @@ export default function Sidebar({ open, onClose }) {
         aria-hidden={!open}
         className={[
           'lg:hidden',
-          'fixed inset-y-0 left-0 z-40 w-72',
+          'fixed inset-y-0 left-0 z-40',
+          'w-[min(18rem,85vw)]', 
           'bg-white dark:bg-[#0F1629]',
           'border-r border-gray-100 dark:border-gray-800',
           'shadow-lg dark:shadow-black/40',
           'transform transition-transform duration-300 ease-in-out',
           open ? 'translate-x-0' : '-translate-x-full',
+          open ? 'pointer-events-auto' : 'pointer-events-none',
         ].join(' ')}
       >
+        {/* Drawer header with close button */}
+        <div className="flex items-center justify-between px-6 pt-5">
+          <div className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+            Navigation
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md px-2 py-1 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-300"
+            aria-label="Close sidebar"
+          >
+            ✕
+          </button>
+        </div>
+
         <SidebarContent onNav={onClose} />
       </aside>
 
       {/* Backdrop */}
       {open && (
         <button
+          type="button"
           aria-label="Close sidebar"
           onClick={onClose}
           className="lg:hidden fixed inset-0 z-30 bg-black/40"
