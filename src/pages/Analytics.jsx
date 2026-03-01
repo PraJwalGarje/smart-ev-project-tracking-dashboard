@@ -13,7 +13,7 @@ import {
   PieChart,
   Pie,
   Cell,
-  ResponsiveContainer,   
+  ResponsiveContainer,
 } from 'recharts';
 
 // Simple stat card just for this page
@@ -27,14 +27,14 @@ function StatCard({ label, value, suffix, tone = 'primary' }) {
 
   return (
     <div className="card flex flex-col justify-between">
-      <div className="text-sm text-gray-500">{label}</div>
-      <div className={`mt-2 text-3xl font-bold tracking-tight ${toneClass}`}>
-        {value}
-        {suffix && (
-          <span className="text-lg ml-1 align-middle">
-            {suffix}
-          </span>
-        )}
+      {/* Animate only inner content so card border/ring never clips */}
+      <div className="stat-card-inner animate-pop-twice">
+        <div className="text-sm text-gray-500">{label}</div>
+
+        <div className={`mt-2 text-3xl font-bold tracking-tight ${toneClass}`}>
+          {value}
+          {suffix && <span className="text-lg ml-1 align-middle">{suffix}</span>}
+        </div>
       </div>
     </div>
   );
@@ -138,7 +138,6 @@ export default function Analytics() {
     }));
   }, [projects]);
 
-  // Shared tooltip styling so the month label is visible in both themes
   const tooltipContentStyle = {
     backgroundColor: '#ffffff',
     borderColor: '#e5e7eb',
@@ -162,28 +161,18 @@ export default function Analytics() {
         Visual insights into Smart EV project health, charging activity, and maintenance risk.
       </p>
 
-      {err && (
-        <div className="analytics-error-message">
-          {err}
-        </div>
-      )}
+      {err && <div className="analytics-error-message">{err}</div>}
 
       {/* Top stats */}
       <div className="analytics-summary-grid">
-        <div className="animate-pop-twice">
-          <StatCard label="Tracked Projects" value={trackedProjects} />
-        </div>
-        <div className="animate-pop-twice">
-          <StatCard label="Total Milestones" value={totalMilestones} />
-        </div>
-        <div className="animate-pop-twice">
-          <StatCard
-            label="Avg. Project Health"
-            value={avgHealth}
-            suffix="%"
-            tone="success"
-          />
-        </div>
+        <StatCard label="Tracked Projects" value={trackedProjects} />
+        <StatCard label="Total Milestones" value={totalMilestones} />
+        <StatCard
+          label="Avg. Project Health"
+          value={avgHealth}
+          suffix="%"
+          tone="success"
+        />
       </div>
 
       {/* Charts */}
@@ -197,10 +186,7 @@ export default function Analytics() {
 
           <div className="analytics-chart-container">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={healthTrendData}
-                margin={{ top: 10, left: 0, right: 8 }}
-              >
+              <LineChart data={healthTrendData} margin={{ top: 10, left: 0, right: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis
                   dataKey="month"
@@ -243,10 +229,7 @@ export default function Analytics() {
 
           <div className="analytics-chart-container">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={chargingData}
-                margin={{ top: 10, left: 0, right: 8 }}
-              >
+              <BarChart data={chargingData} margin={{ top: 10, left: 0, right: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis
                   dataKey="day"
@@ -304,22 +287,16 @@ export default function Analytics() {
               Distribution based on project status
             </h4>
             {riskBuckets.map((bucket) => (
-              <div
-                key={bucket.name}
-                className="analytics-risk-legend-row"
-              >
+              <div key={bucket.name} className="analytics-risk-legend-row">
                 <div className="analytics-risk-legend-label">
                   <span
                     className="analytics-risk-legend-color-dot"
                     style={{ backgroundColor: bucket.color }}
                   />
-                  <span className="analytics-risk-legend-text">
-                    {bucket.name}
-                  </span>
+                  <span className="analytics-risk-legend-text">{bucket.name}</span>
                 </div>
                 <div className="analytics-risk-legend-meta">
-                  {bucket.value} project{bucket.value !== 1 ? 's' : ''} (
-                  {bucket.percent}
+                  {bucket.value} project{bucket.value !== 1 ? 's' : ''} ({bucket.percent}
                   %)
                 </div>
               </div>
@@ -328,11 +305,7 @@ export default function Analytics() {
         </div>
       </div>
 
-      {loading && (
-        <div className="analytics-loading-message">
-          Loading analytics…
-        </div>
-      )}
+      {loading && <div className="analytics-loading-message">Loading analytics…</div>}
     </>
   );
 }
