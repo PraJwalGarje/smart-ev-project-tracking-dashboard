@@ -18,6 +18,10 @@ export default function TimelineGantt({
 }) {
   const VIEW = (view || "Week").toLowerCase();
 
+  // DEBUG: Check incoming tasks
+  console.log("TimelineGantt tasks length:", tasks?.length);
+  console.log("TimelineGantt first task:", tasks?.[0]);
+
   // Normalize tasks safely (prevents NaN% bars + handles missing/invalid end dates)
   const normalizedTasks = useMemo(() => {
     return (tasks || [])
@@ -41,6 +45,9 @@ export default function TimelineGantt({
       })
       .filter(Boolean);
   }, [tasks]);
+
+  // DEBUG: Check normalized tasks
+  console.log("normalizedTasks length:", normalizedTasks.length);
 
   // Build timeline range using Math.min / Math.max (plugin-free)
   const { min, max } = useMemo(() => {
@@ -84,7 +91,7 @@ export default function TimelineGantt({
       let current = min.startOf("isoWeek");
       while (current.isBefore(max)) {
         tickList.push({
-          key: `week-${current.valueOf()}`, // <-- fixes duplicate key issue
+          key: `week-${current.valueOf()}`,
           label: `W${current.isoWeek()} ${current.format("DD MMM")}`,
           date: current,
         });
@@ -135,10 +142,7 @@ export default function TimelineGantt({
     <div className="w-full rounded-md border border-gray-100 overflow-hidden min-w-0">
       {/* Header */}
       <div className="bg-gray-50 border-b border-gray-100">
-        <div
-          className="grid min-w-0"
-          style={{ gridTemplateColumns: columnTemplate }}
-        >
+        <div className="grid min-w-0" style={{ gridTemplateColumns: columnTemplate }}>
           <div className="px-3 py-2 text-sm text-slate-800">Name</div>
 
           {/* Scrollable timeline header */}
@@ -173,9 +177,7 @@ export default function TimelineGantt({
           return (
             <div
               key={task.id ?? `${task.name}-${index}`}
-              className={`grid items-center ${
-                index ? "border-t" : ""
-              } border-gray-100 min-w-0`}
+              className={`grid items-center ${index ? "border-t" : ""} border-gray-100 min-w-0`}
               style={{ gridTemplateColumns: columnTemplate, height }}
             >
               <div className="px-3 text-sm text-gray-800 truncate min-w-0">
@@ -186,11 +188,7 @@ export default function TimelineGantt({
               <div className="relative min-w-0 overflow-x-auto">
                 <div
                   className="relative"
-                  style={{
-                    width: timelineWidth,
-                    minWidth: timelineWidth,
-                    height: "100%",
-                  }}
+                  style={{ width: timelineWidth, minWidth: timelineWidth, height: "100%" }}
                 >
                   {/* Grid overlay */}
                   <div className="absolute inset-0 pointer-events-none">
@@ -213,9 +211,7 @@ export default function TimelineGantt({
                       width: `${widthPercent}%`,
                       backgroundColor: task.color || "#c7d2fe",
                     }}
-                    title={`${task._start.format("DD MMM YYYY")} → ${task._end.format(
-                      "DD MMM YYYY"
-                    )}`}
+                    title={`${task._start.format("DD MMM YYYY")} → ${task._end.format("DD MMM YYYY")}`}
                   />
                 </div>
               </div>
